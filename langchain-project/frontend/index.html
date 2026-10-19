@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#F6F3EC">
+  <title>MR. JITESH AI AGENT</title>
+
+  <!-- Fonts: Manrope (interface) + Newsreader (editorial headings).
+       If you are offline, the system fallbacks defined in styles.css are used. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Icon sprite: every icon in the app is referenced from here with <use href="#i-name"> -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-panel" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol>
+      <symbol id="i-send" viewBox="0 0 24 24"><path d="M21.5 2.5 10.5 13.5M21.5 2.5l-7 19-4-8.5-8.5-4 19.5-6.5z"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5M12 16h.01"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.3-4.5L4 8.5M4 4v4.5h4.5M4 13a8 8 0 0 0 14.3 4.5l1.7-2M20 20v-4.5h-4.5"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M3 5h6a3 3 0 0 1 3 3v12a2.5 2.5 0 0 0-2.5-2.5H3zM21 5h-6a3 3 0 0 0-3 3v12a2.5 2.5 0 0 1 2.5-2.5H21z"/></symbol>
+      <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 0 0-3.6 10.8c.6.5 1.1 1.2 1.1 2v.2h5v-.2c0-.8.5-1.5 1.1-2A6 6 0 0 0 12 3z"/></symbol>
+      <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19zM14.5 6.5l3 3"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="app" id="app" data-mode="regular">
+
+    <!-- ============ Sidebar ============ -->
+    <aside class="sidebar" id="sidebar" aria-label="Conversations and settings">
+      <div class="sidebar-inner">
+
+        <div class="brand">
+          <div class="monogram" aria-hidden="true"><span>J</span></div>
+          <div class="brand-text">
+            <p class="brand-name">MR. JITESH AI AGENT</p>
+            <p class="brand-sub">Personal AI Assistant</p>
+          </div>
+          <button type="button" class="icon-btn drawer-close" id="drawer-close" aria-label="Close menu" data-tip="Close menu" data-tip-pos="below-end">
+            <svg class="icon" aria-hidden="true"><use href="#i-x"/></svg>
+          </button>
+        </div>
+
+        <div class="side-actions">
+          <button type="button" class="btn btn-primary btn-block" id="new-chat-side">
+            <svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>
+            <span>New chat</span>
+          </button>
+        </div>
+
+        <nav class="conv-section" aria-labelledby="recent-heading">
+          <h2 class="side-heading" id="recent-heading">Recent conversations</h2>
+          <ul class="conv-list" id="conv-list"></ul>
+          <p class="conv-empty" id="conv-empty">Conversations you start will be listed here.</p>
+        </nav>
+
+        <div class="side-foot">
+          <button type="button" class="btn btn-quiet btn-block" id="clear-chat">
+            <svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg>
+            <span>Clear current conversation</span>
+          </button>
+
+          <dl class="side-status">
+            <div class="side-row">
+              <dt>Mode</dt>
+              <dd><span class="mode-dot" aria-hidden="true"></span><span id="side-mode">Regular</span></dd>
+            </div>
+            <div class="side-row">
+              <dt>Backend</dt>
+              <dd><span class="status-dot" id="side-status-dot" data-state="connecting" aria-hidden="true"></span><span id="side-status">Connecting</span></dd>
+            </div>
+          </dl>
+          <p class="version">Version 1.0.0</p>
+        </div>
+
+      </div>
+    </aside>
+
+    <div class="scrim" id="scrim" aria-hidden="true"></div>
+
+    <!-- ============ Main workspace ============ -->
+    <main class="workspace">
+
+      <header class="topbar">
+        <button type="button" class="icon-btn" id="sidebar-toggle" aria-controls="sidebar" aria-expanded="true" aria-label="Hide sidebar" data-tip="Hide sidebar" data-tip-pos="below-start">
+          <svg class="icon" aria-hidden="true"><use href="#i-panel"/></svg>
+        </button>
+
+        <div class="topbar-title">
+          <h1 id="conv-title">New conversation</h1>
+          <p class="topbar-mode"><span class="mode-dot" aria-hidden="true"></span><span id="header-mode">Regular mode</span></p>
+        </div>
+
+        <button type="button" class="status-pill" id="status-btn" data-state="connecting" aria-label="Backend status: connecting. Select to check again." data-tip="Check connection again" data-tip-pos="below-end">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="status-label">Connecting</span>
+        </button>
+
+        <button type="button" class="btn btn-outline btn-compact" id="new-chat-top" data-tip="Start a new conversation" data-tip-pos="below-end">
+          <svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>
+          <span class="btn-label">New chat</span>
+        </button>
+      </header>
+
+      <div class="messages" id="messages">
+        <div class="column">
+
+          <!-- Welcome state -->
+          <section class="welcome" id="welcome" aria-labelledby="welcome-title">
+            <div class="monogram monogram-xl" aria-hidden="true"><span>J</span></div>
+            <h2 id="welcome-title">Meet MR. JITESH AI AGENT</h2>
+            <p class="welcome-sub">Your personal AI assistant, ready to think, create, and explore.</p>
+            <p class="welcome-hint">Choose a response mode below the message box: Regular for direct answers, Funny for a playful tone, or Fluent for polished prose.</p>
+
+            <ul class="prompt-grid">
+              <li>
+                <button type="button" class="prompt-card" data-prompt="Explain a complex topic simply.">
+                  <span class="prompt-icon" aria-hidden="true"><svg class="icon"><use href="#i-book"/></svg></span>
+                  <span class="prompt-title">Explain a complex topic simply.</span>
+                  <span class="prompt-caption">A clear breakdown without the jargon.</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="prompt-card" data-prompt="Help me brainstorm a project.">
+                  <span class="prompt-icon" aria-hidden="true"><svg class="icon"><use href="#i-bulb"/></svg></span>
+                  <span class="prompt-title">Help me brainstorm a project.</span>
+                  <span class="prompt-caption">Shape ideas, scope, and first steps.</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="prompt-card" data-prompt="Write something creative.">
+                  <span class="prompt-icon" aria-hidden="true"><svg class="icon"><use href="#i-pen"/></svg></span>
+                  <span class="prompt-title">Write something creative.</span>
+                  <span class="prompt-caption">A story, a poem, or something unexpected.</span>
+                </button>
+              </li>
+            </ul>
+          </section>
+
+          <!-- Conversation thread (messages are built with DOM APIs, never innerHTML) -->
+          <div class="thread" id="thread" role="log" aria-label="Conversation" aria-live="polite"></div>
+
+          <!-- Typing indicator -->
+          <div class="msg msg-assistant typing" id="typing" role="status" aria-label="MR. JITESH AI AGENT is replying" hidden>
+            <div class="avatar" aria-hidden="true"><span>J</span></div>
+            <div class="bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============ Composer ============ -->
+      <footer class="composer">
+        <div class="column">
+
+          <div class="notices" id="notices"></div>
+
+          <form class="composer-card" id="composer-form" autocomplete="off">
+            <label class="sr-only" for="message-input">Message MR. JITESH AI AGENT</label>
+            <textarea id="message-input" rows="1" placeholder="Message MR. JITESH AI AGENT..." enterkeyhint="send" spellcheck="true"></textarea>
+
+            <div class="composer-bar">
+              <fieldset class="segmented" aria-label="Response mode">
+                <label class="seg" data-mode="regular" title="Clear, direct, informative answers.">
+                  <input type="radio" name="mode" value="regular" checked>
+                  <span><i class="mode-dot" aria-hidden="true"></i>Regular</span>
+                </label>
+                <label class="seg" data-mode="funny" title="Humorous, playful replies.">
+                  <input type="radio" name="mode" value="funny">
+                  <span><i class="mode-dot" aria-hidden="true"></i>Funny</span>
+                </label>
+                <label class="seg" data-mode="fluent" title="Natural, articulate, polished replies.">
+                  <input type="radio" name="mode" value="fluent">
+                  <span><i class="mode-dot" aria-hidden="true"></i>Fluent</span>
+                </label>
+              </fieldset>
+
+              <div class="composer-end">
+                <span class="char-count" id="char-count">0 / 10,000</span>
+                <button type="submit" class="send-btn" id="send-btn" aria-label="Send message" data-tip="Send (Enter)" data-tip-pos="top-end" disabled>
+                  <svg class="icon icon-send" aria-hidden="true"><use href="#i-send"/></svg>
+                  <span class="spinner" aria-hidden="true"></span>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <p class="composer-note">Enter sends. Shift + Enter adds a new line.</p>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Confirmation dialog (clear / delete) -->
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-body">
+    <form method="dialog" class="dialog-card">
+      <h2 id="confirm-title">Clear conversation?</h2>
+      <p id="confirm-body"></p>
+      <div class="dialog-actions">
+        <button type="submit" value="cancel" class="btn btn-outline">Cancel</button>
+        <button type="submit" value="confirm" class="btn btn-danger" id="confirm-ok">Clear</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Toast (copy feedback etc.) -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
